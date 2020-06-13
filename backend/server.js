@@ -2,7 +2,7 @@ User = require('./models/customer.model')
 
 const express= require('express');
 const mongoose= require('mongoose');
-
+const bodyParser = require('body-parser');
 const app= express();
 const port= 8000;
 
@@ -24,5 +24,14 @@ connection.once('open', function(){
 //   }
 
 // })
+
+const customerroutes = require('./routes/customer');
+const farmerroutes = require('./routes/farmer');
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+app.use('/customer', customerroutes);
+app.use('/farmer', farmerroutes);
 
 app.listen(port, () => console.info('REST API running on port '+ port));

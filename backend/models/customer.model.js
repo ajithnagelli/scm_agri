@@ -5,7 +5,7 @@ const schema = new Schema({
     
     username: {type:String, required:[true, 'Username cannot be empty']},
 
-    hashedPassword: {type:String, required:[true, 'Password cannot be empty']},
+    password: {type:String, required:[true, 'Password cannot be empty']},
 
     phone: { type:Number, required: [true, 'Phone number cannot be empty'],
 
