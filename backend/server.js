@@ -34,4 +34,4 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use('/customer', customerroutes);
 app.use('/farmer', farmerroutes);
 
-app.listen(port, () => console.info('REST API running on port '+ port));
+app.listen(port, () => console.info('APIs running on port '+ port));

@@ -1,6 +1,8 @@
 const express = require('express');
 const bcrypt = require('bcryptjs')
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+const auth = require('./middleware_auth');
 
 
 const Farmer = require('../models/farmer.model');
@@ -56,5 +58,63 @@ function register(req, res){
         res.json({ error: errors });
       });
 }
+
+
+router.post('/login', login)
+function login(req, res){
+    const data={
+        email: req.body.email,
+        password: req.body.password
+    }
+    Farmer.findOne({
+        email: req.body.email,
+    })
+    .then(user =>{
+        if(user){
+            if(bcrypt.compareSync(data.password, user.password)){
+                const payload = {
+                    _id: user._id,
+                    email: user.email,
+                    username: user.username
+                  }
+                  const token = jwt.sign(payload, process.SECRET_KEY, {
+                    algorithm: 'HS256',
+                    expiresIn: 86400
+                  })
+                  res.send(token)
+            }
+            else{
+                res.json({error: 'Enter correct password'})
+            }
+        }
+        else{
+            res.json({error: 'User doesnot exist'})
+        }
+    })
+    .catch(err => {
+        console.log(err)
+        res.send('error: ' + err)
+    });
+}
+
+
+router.post('/profile', auth, profile);
+function profile(req, res){
+    Farmer.findOne({
+        _id: req.user._id
+    })
+    .then(user => {
+        if(user){
+            res.send(user)
+        }
+        else{
+            res.send('User not logged in')
+        }
+    })
+    .catch(err => {
+        res.json('error:' + err)
+    });
+}
+
 
 module.exports = router;
