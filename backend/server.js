@@ -27,11 +27,13 @@ connection.once('open', function(){
 
 const customerroutes = require('./routes/customer');
 const farmerroutes = require('./routes/farmer');
+const deliveryagentroutes = require('./routes/deliveryagent');
 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use('/customer', customerroutes);
 app.use('/farmer', farmerroutes);
+app.use('/deliveryagent', deliveryagentroutes);
 
 app.listen(port, () => console.info('APIs running on port '+ port));
