@@ -117,4 +117,34 @@ function profile(req, res){
 }
 
 
+router.post('/edit_profile', auth, edit_profile);
+function edit_profile(req, res){
+    var newValues = { 
+        $set: {
+            phone: req.body.phone,
+            gender: req.body.gender,
+            address: req.body.address,
+            pincode: req.body.pincode,
+            latitude: req.body.latitude,
+            longitude: req.body.longitude
+        } 
+    };
+    Farmer.findOneAndUpdate({
+        _id: req.user._id
+    }, newValues)
+    .then(user => {
+        if(user){
+            res.send('User profile updated')
+            res.redirect('http://localhost:8000/customer/profile')
+        }
+        else{
+            res.send('User not logged in')
+        }
+    })
+    .catch(err => {
+        res.json('error:' + err)
+    });
+}
+
+
 module.exports = router;

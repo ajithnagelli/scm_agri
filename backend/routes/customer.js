@@ -26,8 +26,8 @@ function signup(req, res){
                 bcrypt.hash(req.body.password, 10, (err, hash) => {
                     data.password = hash;
                     Customer.create(data)
-                    .then(user =>{
-                        res.json({success: 'Success'});
+                    .then(u =>{
+                        res.json({success: 'Success', user: u});
                     })
                     .catch(err => {
                         var arr = Object.keys(err['errors'])
@@ -98,6 +98,7 @@ function login(req, res){
     });
 }
 
+
 router.post('/profile', auth, profile);
 function profile(req, res){
     Customer.findOne({
@@ -106,6 +107,36 @@ function profile(req, res){
     .then(user => {
         if(user){
             res.send(user)
+        }
+        else{
+            res.send('User not logged in')
+        }
+    })
+    .catch(err => {
+        res.json('error:' + err)
+    });
+}
+
+
+router.post('/edit_profile', auth, edit_profile);
+function edit_profile(req, res){
+    var newValues = { 
+        $set: {
+            phone: req.body.phone,
+            gender: req.body.gender,
+            address: req.body.address,
+            pincode: req.body.pincode,
+            latitude: req.body.latitude,
+            longitude: req.body.longitude
+        } 
+    };
+    Customer.findOneAndUpdate({
+        _id: req.user._id
+    }, newValues)
+    .then(user => {
+        if(user){
+            res.send('User profile updated')
+            res.redirect('http://localhost:8000/customer/profile')
         }
         else{
             res.send('User not logged in')

@@ -59,13 +59,13 @@ const schema = new Schema({
 
             quantity: {type:String, required:true},
 
-            price: {type:String, required:true}
+            price: {type:String, required:true},
+
+            quality_check: {type: Boolean, default:false},
         }],
 
         total_cost: {type:String, required:true},
     }],
-
-    quality_check: {type: Boolean, default:false},
 
     prefered_orders: {type: Number}
     
