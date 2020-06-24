@@ -69,7 +69,7 @@ const schema = new Schema({
     orders: [{
         orderId: {type:String, required:true},
 
-        status: {type:String, enum:['initiated', 'processing', 'completed', 'failed'], required:true},
+        status: {type:String, enum:['received', 'assigned_farmer', 'assigned_deliveryagent', 'delivered'], required:true},
 
         postedAt: {type:Date, default: Date.now, required:true},
 
@@ -84,6 +84,8 @@ const schema = new Schema({
         }],
 
         total_cost: {type:String, required:true},
+
+        updatedAt: {type:Date, default: Date.now, required:true},
     }]
     
 });

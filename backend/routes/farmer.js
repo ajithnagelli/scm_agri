@@ -7,8 +7,7 @@ const auth = require('./middleware_auth');
 
 const Farmer = require('../models/farmer.model');
 
-router.post('/signup', register);
-
+router.post('/signup', register)
 function register(req, res){
     const data = {
         username: req.body.username,
@@ -98,7 +97,7 @@ function login(req, res){
 }
 
 
-router.post('/profile', auth, profile);
+router.post('/profile', auth, profile)
 function profile(req, res){
     Farmer.findOne({
         _id: req.user._id
@@ -117,9 +116,9 @@ function profile(req, res){
 }
 
 
-router.post('/edit_profile', auth, edit_profile);
+router.post('/edit_profile', auth, edit_profile)
 function edit_profile(req, res){
-    var newValues = { 
+    const newValues = { 
         $set: {
             phone: req.body.phone,
             gender: req.body.gender,
@@ -135,11 +134,92 @@ function edit_profile(req, res){
     .then(user => {
         if(user){
             res.send('User profile updated')
-            res.redirect('http://localhost:8000/customer/profile')
         }
         else{
             res.send('User not logged in')
         }
+    })
+    .catch(err => {
+        res.json('error:' + err)
+    });
+}
+
+
+router.post('/add_product', auth, add_product)
+function add_product(req, res){
+    var flag = 1
+    Farmer.findOne({
+        _id: req.user._id
+    })
+    .then(u => {
+        for(let i=0; i < u.products.length; i++){
+            if(u.products[i].productname == req.body.productname){
+                flag = 0
+            }
+        }
+        if(flag == 1){
+            const newValues = {
+                $push: {
+                    products: {
+                        productname: req.body.productname,
+                        quantity: req.body.quantity,
+                        price: req.body.price,
+                    }
+                }
+            }
+            Farmer.findOneAndUpdate({
+                _id: req.user._id
+            }, newValues)
+            .then(user =>{
+                if(user){
+                    res.send('Added product')
+                }
+                else{
+                    res.send('User not logged in')
+                }
+            })
+            .catch(err => {
+                res.json('error:' + err)
+            });
+        }
+        else{
+            res.send('Product already exists')
+        }
+    })
+    .catch(er => {
+        res.json('error:' + er)
+    });
+}
+
+
+router.post('/edit_product/:name', auth, edit_product)
+function edit_product(req, res){
+    const newValues = {
+        $set: {
+            "products.$.quantity": req.body.quantity,
+            "products.$.price": req.body.price
+        }
+    }
+    Farmer.updateOne({
+        _id: req.user._id,
+        "products.productname": req.params.name 
+    }, newValues)
+    .then(u =>{
+        res.send(u)
+    })
+    .catch(err => {
+        res.json('error:' + err)
+    });
+}
+
+
+router.post('/delete_product/:name', auth, delete_product)
+function delete_product(req, res){
+    Farmer.updateOne({
+        _id: req.user._id,
+    }, { $pull: { 'products': { productname: req.params.name } } })
+    .then(u =>{
+        res.send(u)
     })
     .catch(err => {
         res.json('error:' + err)

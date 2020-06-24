@@ -54,6 +54,26 @@ const schema = new Schema({
 
         price: {type:String, required:true}
     }],
+
+    orders: [{
+        orderId: {type:String, required:true},
+
+        status: {type:String, enum:['accepted', 'rejected'], required:true},
+
+        postedAt: {type:Date, default: Date.now, required:true},
+
+        products: [{
+            productId: {type:String, required:true},
+
+            productname : {type:String, required:true},
+
+            quantity: {type:String, required:true},
+
+            price: {type:String, required:true}
+        }],
+
+        total_cost: {type:String, required:true},
+    }]
     
 });
 
