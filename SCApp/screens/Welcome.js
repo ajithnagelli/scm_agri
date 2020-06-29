@@ -13,6 +13,7 @@ export default class App extends React.Component {
     };
   
     render() {
+      this.props.navigation.navigate('DrawerRender', {screen: 'VegCardView'})
       return (
           <View style={styles.container}>
             

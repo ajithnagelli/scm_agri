@@ -2,8 +2,11 @@
 
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import Signin from '../screens/Signin';
+
 import VegCardView from '../components/VegCardView'
+import ProfileActions from '../components/ProfileActions'
+import MyMap from '../components/MyMap'
+import MyOrders from '../screens/MyOrders';
 
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,21 +14,24 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Button, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+
 const Drawer = createDrawerNavigator();
 
-function DrawerImage() {
+function MyDrawer(params) {
   return(
     <View style={styles.container}>
-      <View>
+      <TouchableOpacity onPress={()=>params.navigation.navigate('DrawerRender', {screen: 'ProfileActions'})}>
         <Avatar
           rounded
           size='xlarge'
           source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRC6iPDSqcgCcAtdEz_rPY0B-sxqMd7hz0Hlg&usqp=CAU'}}
           />
         <Text style={{fontWeight: 'bold', alignSelf: 'center', marginTop: 10, fontSize: 20}}>User Name</Text>
-      </View>
+      </TouchableOpacity>
 
-      <View style={{flexDirection: 'row', alignItems: 'flex-end', marginHorizontal: 10, borderBottomWidth: 2, borderBottomColor: 'black', paddingVertical: 15}}>
+      <TouchableOpacity 
+      onPress={()=>params.navigation.navigate('DrawerRender', {screen: 'MyOrders', params: {navigation: params.navigation}})}
+      style={{flexDirection: 'row', alignItems: 'flex-end', marginHorizontal: 10, borderBottomWidth: 2, borderBottomColor: 'black', paddingVertical: 15}}>
         <Icon
           style={{flex: 1, flexDirection: 'row', alignSelf: 'flex-start'}}
           name="list"
@@ -39,7 +45,7 @@ function DrawerImage() {
           size={20}
           color="#000"
         />
-      </View>
+      </TouchableOpacity>
       <View style={{flexDirection: 'row', alignItems: 'flex-end', marginHorizontal: 10, borderBottomWidth: 2, borderBottomColor: 'black', paddingVertical: 15}}>
         <Icon
           style={{flex: 1, flexDirection: 'row', alignSelf: 'flex-start'}}
@@ -148,13 +154,15 @@ function DrawerImage() {
     </View>
   )
 }
-function DrawerRender() {
+function DrawerRender({navigation}) {
   return (
     <NavigationContainer independent={true}>
-      <Drawer.Navigator drawerContent={()=><DrawerImage/>} initialRouteName="VegCardView">
+      <Drawer.Navigator drawerContent={()=><MyDrawer navigation={navigation}/>} initialRouteName="VegCardView">
         
         <Drawer.Screen name="VegCardView" component={VegCardView} />
-        <Drawer.Screen name="Signin" component={Signin} />
+        <Drawer.Screen name="ProfileActions" component={ProfileActions} />
+        <Drawer.Screen name="MyMap" component={MyMap} />
+        <Drawer.Screen name="MyOrders" component={MyOrders} />
         
       </Drawer.Navigator>
     </NavigationContainer>

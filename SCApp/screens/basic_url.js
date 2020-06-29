@@ -1,1 +1,0 @@
-export default a = 'http://192.168.43.221:8000/';

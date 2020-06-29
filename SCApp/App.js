@@ -12,8 +12,10 @@ import Example from './screens/Example';
 import SigninOTPSocial from './screens/SigninOTPSocial';
 import Tp from './screens/Tp';
 import WalkThrough from './screens/WalkThrough';
-import VegCardView from './components/VegCardView';
+// import VegCardView from './components/VegCardView';
 import DrawerRender from './components/DrawerRender';
+import MyMap from './components/MyMap';
+// import ProfileActions from './components/ProfileActions';
 import ForgotPass from './screens/ForgotPass';
 import EnterOTP from './screens/EnterOTP';
 
@@ -54,10 +56,10 @@ export default function MyStack() {
         name="WalkThrough"
         component={WalkThrough}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="VegCardView"
         component={VegCardView}
-      />
+      /> */}
       <Stack.Screen
         name="DrawerRender"
         component={DrawerRender}
@@ -74,6 +76,14 @@ export default function MyStack() {
         name="EnterOTP"
         component={EnterOTP}
       />
+      <Stack.Screen
+        name="MyMap"
+        component={MyMap}
+      />
+      {/* <Stack.Screen
+        name="ProfileActions"
+        component={ProfileActions}
+      /> */}
     </Stack.Navigator>
     </NavigationContainer>
   );

@@ -2,12 +2,69 @@
 
 import React, {useState} from 'react'
 import {StyleSheet, Text, View, Image} from 'react-native';
-import { Card, Button, Header, Badge } from 'react-native-elements';
+import { Card, Button, Header, Badge, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 
+function ActiveOrder(props) {
+    return(
+        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly'}}>
+            <Text>Placed on {props.placedOn}</Text>
+            <Icon
+                name='truck'
+                size={20}
+                color='black'
+            />
+            <Text>{props.deliveredBy}</Text>
+
+        </View>
+    )
+}
+
+
+function CategoryButton() {
+    return(
+        <Button
+            title='Categories'
+            onPress={()=>{console.log('category button clicked')}}
+            titleStyle={{color: 'black', fontWeight: 'bold'}}
+            buttonStyle={{ backgroundColor: '#fff', borderWidth: 2, borderColor: 'black'}}
+        />
+    )
+}
+
+function SearchBar() {
+
+    const [SearchText, setSearchText] = useState();
+
+    return(
+        <View style={{flex: 1}}>
+            <Input
+                placeholderTextColor='#555'
+                placeholder='Search For Products'
+                onSubmitEditing={()=>{console.log('show search results')}}
+                onChangeText={value => {setSearchText(value)} }
+                leftIcon={
+                    <Icon
+                    name='search'
+                    size={28}
+                    color='black'
+                    />
+                }
+                rightIcon={
+                    <Icon
+                    name='angle-right'
+                    size={20}
+                    color='black'
+                    onPress={()=>{console.log('show search results')}}
+                    />
+                }
+            />
+        </View>
+    )
+}
 function Mybutton(props) {
     return(
         <View style={{backgroundColor:'white'}}>
@@ -88,6 +145,7 @@ function MyView() {
 }
 
 export default function VegCardView(props)  {
+    const [Count, setCount] = useState(3);
     return(
         <ScrollView stickyHeaderIndices={[0]} style={{backgroundColor: 'white'}}>
             <Header
@@ -97,11 +155,22 @@ export default function VegCardView(props)  {
                 rightComponent={<Myicon/>}
                 centerComponent={{text:'TAAZA DUKAAN', style: {letterSpacing: 5, fontWeight: 'bold'}}}
             />
-            <Header
+            {/* <Header
                 rightComponent={<Mybutton name='sort'/>}
                 leftComponent={<Mybutton name='filter'/>}
                 backgroundColor= 'white'
-            />
+            /> */}
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', margin: 10, marginBottom: -10}}>
+                <SearchBar/>
+                <CategoryButton/>
+            </View>
+
+            <View style={{marginHorizontal: 10, backgroundColor:'#c1c1c1', padding: 10}}>
+                <Text style={{fontWeight: 'bold', fontSize: 20, paddingBottom: 10}}>Your Active Orders ({Count})</Text>
+                <ActiveOrder placedOn='17th june' deliveredBy='Expected Delivery : 9 am mon'/>
+                <ActiveOrder placedOn='18th june' deliveredBy='Expected Delivery : 10 am tue'/>
+                <ActiveOrder placedOn='19th june' deliveredBy='Expected Delivery : 9 am wed'/>
+            </View>
 
             <View style={{flexDirection: 'row', zIndex:-1}}>
                 <MyView/>
