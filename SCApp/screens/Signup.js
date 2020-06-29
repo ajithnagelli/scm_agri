@@ -1,8 +1,11 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
+import axios from 'axios';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input, Button } from 'react-native-elements';
+
+// import a from './basic_url'
 
 export default class Signup extends React.Component {
     
@@ -17,6 +20,42 @@ export default class Signup extends React.Component {
         password1: '',
         password2: '',
 
+    };
+    
+    signUp = async() => {
+        console.log("Sign Up")
+        await axios({
+            method: 'post',
+            url: 'http://192.168.43.221:8000/customer/signup/',
+            data: {
+                email:this.state.email,
+                password:this.state.password1,
+                retype_password: this.state.password2,
+                phone:this.state.phoneNum,
+                username:this.state.name,
+            }
+        }).then((response) => {
+            if(response.data.error == undefined){
+                console.log("Successfully Registered ", response.data)
+                console.log("Token is ", response.data.token)
+                AsyncStorage.setItem('userToken', response.data.token)
+                this.props.navigation.navigate('WalkThrough')
+            }
+            else if(Array.isArray(response.data.error)){
+                console.log(response.data.error)
+                Alert.alert('Error', 'Fill all details', [
+                    {text: 'Ok', onPress: ()=> {}}
+                ])
+            }
+            else{
+                console.log(response.data.error)
+                Alert.alert('Error', response.data.error, [
+                    {text: 'Ok', onPress: ()=> {}}
+                ])
+            }
+        }).catch((error) => {
+            console.log(error)
+        });
     };
 
     render() {
@@ -132,7 +171,7 @@ export default class Signup extends React.Component {
                         />
                         }
                         iconRight
-                        onPress={()=>{this.props.navigation.navigate('WalkThrough')}}
+                        onPress={this.signUp}
                         // onPress={()=>console.log(this.state.name + " " + this.state.email + " " + this.state.phoneNum + " " + this.state.password1 + " " + this.state.password2)}
                     />
                 </View>

@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, AsyncStorage, Alert } from 'react-native';
+import axios from 'axios';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input, Button } from 'react-native-elements';
@@ -15,6 +16,41 @@ export default class Signin extends React.Component {
         email: '',
         password: '',
     };
+
+    signIn = async() => {
+        console.log("Sign in to "+"user/login")
+        await axios({
+            method: 'POST',
+            url: 'http://192.168.43.221:8000/customer/login/',
+            data: {
+                email:this.state.email,
+                password:this.state.password,
+            }
+        }).then((response) => {
+            if(response.data.error == undefined){
+                console.log("Token is ", response.data)
+                AsyncStorage.setItem('userToken', response.data)
+                this.props.navigation.navigate('DrawerRender')
+            }
+            else if(Array.isArray(response.data.error)){
+                console.log(response.data.error)
+                Alert.alert('Error', 'Fill all details', [
+                    {text: 'Ok', onPress: ()=> {}}
+                ])
+            }
+            else{
+                console.log(response.data.error)
+                Alert.alert('Error', response.data.error, [
+                    {text: 'Ok', onPress: ()=> {}}
+                ])
+            }
+        }).catch((error) => {
+            console.log(error)
+            Alert.alert('Error', 'Incorrect Login Credentials', [
+              {text: 'Ok', onPress: ()=> {}}
+            ])
+        });
+    }
 
     render() {
         return(
@@ -77,7 +113,7 @@ export default class Signin extends React.Component {
                         />
                         }
                         iconRight
-                        onPress={()=>{console.log(this.state.email + " " + this.state.password)}}
+                        onPress={this.signIn}
                     />
 
                     <TouchableOpacity style={{marginHorizontal: 30, alignSelf: 'flex-end', marginTop: 30 }} onPress={()=>this.props.navigation.navigate('ForgotPass')}>

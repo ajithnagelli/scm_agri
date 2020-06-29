@@ -37,13 +37,13 @@ const schema = new Schema({
     
     gender: {type:String, enum: ['Male', 'Female', 'Prefer not to say'], default:'Prefer not to say'},
 
-    address: {type:String, required:true},
+    address: {type:String},
 
-    pincode: {type:Number, required:true},
+    pincode: {type:Number},
 
-    latitude:{type:String, required:true},
+    latitude:{type:String},
 
-    longitude: {type:String, required:true},
+    longitude: {type:String},
     
     eId: {type:String},
     

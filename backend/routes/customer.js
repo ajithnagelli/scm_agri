@@ -17,17 +17,27 @@ function signup(req, res){
         phone: req.body.phone,
     };
     const retype_password = req.body.retype_password;
+    console.log(data)
     Customer.findOne({
         email: req.body.email,
     })
     .then(user => {
         if(!user){
-            if(retype_password == password){
-                bcrypt.hash(req.body.password, 10, (err, hash) => {
+            if(retype_password == data.password){
+                bcrypt.hash(req.body.password, 10, (er, hash) => {
                     data.password = hash;
                     Customer.create(data)
                     .then(u =>{
-                        res.json({success: 'Success', user: u});
+                        const payload = {
+                            _id: u._id,
+                            email: u.email,
+                            username: u.username
+                        }
+                        const token = jwt.sign(payload, process.SECRET_KEY, {
+                            algorithm: 'HS256',
+                            expiresIn: 86400
+                        })
+                        res.json({success: 'Success', use: u, token: token});
                     })
                     .catch(err => {
                         var arr = Object.keys(err['errors'])
@@ -50,13 +60,8 @@ function signup(req, res){
         }
     })
     .catch(err => {
-        var arr = Object.keys(err['errors'])
-        var errors = []
-        for (i in arr) {
-          errors.push(err['errors'][arr[i]].message);
-        }
-        console.log(errors)
-        res.json({ error: errors });
+        console.log(err)
+        res.json({error: err });
       });
 }
 
