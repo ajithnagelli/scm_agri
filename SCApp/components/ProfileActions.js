@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Text, Image, TouchableOpacity, StyleSheet,  AsyncStorage, Alert } from 'react-native';
 import { Button, Avatar, Badge } from 'react-native-elements';
 
 import Menu, {
@@ -16,13 +16,25 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const { SlideInMenu } = renderers;
 
 
-export default function ProfileActions() {
+export default function ProfileActions(params) {
+
+    var user = params.route.params.user
 
     const [Email, setEmail] = useState(null);
     const [PhoneNumber, setPhoneNumber] = useState(null);
     const [Password, setPassword] = useState(null);
     const [Latitude, setLatitude] = useState(null);
     const [Longitude, setLongitude] = useState(null);
+
+    console.log(user.phone)
+    var logOut = async() => {
+      console.log("Logout")
+      await AsyncStorage.clear()
+      params.navigation.reset({
+        index: 0,
+        routes: [{ name: 'Signin' }],
+      })
+    };
 
     return(
         <MenuProvider>
@@ -55,12 +67,15 @@ export default function ProfileActions() {
                     <TextInput
                      onChangeText={data=>{setPhoneNumber(data)}}
                      style={{alignSelf: 'center', height: 50, borderBottomWidth: 2, borderBottomColor: 'black', marginBottom: 10}}
-                     placeholder="Phone Number"></TextInput>
+                     placeholder="Phone Number"
+                     keyboardType={'phone-pad'}
+                     ></TextInput>
                 
             
                     <TextInput
                      onChangeText={data=>{setEmail(data)}}
                      style={{alignSelf: 'center', height: 50, borderBottomWidth: 2, borderBottomColor: 'black', marginBottom: 10}}
+                     keyboardType={'email-address'}
                      placeholder="Email"></TextInput>
                 
             
@@ -121,7 +136,7 @@ export default function ProfileActions() {
             </TouchableOpacity>
 
             <TouchableOpacity 
-                onPress={console.log('logout')}
+                onPress={logOut}
                 style={{borderWidth: 2, padding: 10, flexDirection: 'row'}}>
                 <Icon 
                     name='sign-out'

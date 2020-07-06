@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
 import axios from 'axios';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -22,6 +22,14 @@ export default class Signup extends React.Component {
 
     };
     
+    // async componentDidMount(){
+    //     AsyncStorage.getItem('userToken', (err,result)=>{
+    //       if (result) {
+    //         this.props.navigation.navigate('DrawerRender', {screen: 'VegCardView'})
+    //       }
+    //     });
+    // }
+
     signUp = async() => {
         console.log("Sign Up")
         await axios({

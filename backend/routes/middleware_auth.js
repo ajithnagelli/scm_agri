@@ -5,6 +5,7 @@ process.SECRET_KEY = 'Emic_Enterprise';
 function auth(req, res, next){
     const token= req.header('Auth');
     console.log(token)
+    console.log(token)
     if(!token){
         res.status(401).json({msg: 'token does not exist'})
     };

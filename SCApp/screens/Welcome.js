@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, AsyncStorage} from 'react-native';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -11,9 +11,16 @@ export default class App extends React.Component {
     state = {
       language: 'English',
     };
+    // async componentDidMount(){
+    //   AsyncStorage.getItem('userToken', (err,result)=>{
+    //     if (result) {
+    //       this.props.navigation.navigate('DrawerRender', {screen: 'VegCardView'})
+    //     }
+    //   });
+    // }
   
     render() {
-      this.props.navigation.navigate('DrawerRender', {screen: 'VegCardView'})
+      // this.props.navigation.navigate('DrawerRender', {screen: 'VegCardView'})
       return (
           <View style={styles.container}>
             

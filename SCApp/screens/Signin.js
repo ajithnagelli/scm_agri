@@ -15,13 +15,30 @@ export default class Signin extends React.Component {
         pass1: true,
         email: '',
         password: '',
+        // error: this.props.navigation.state.params.error,
     };
+    
+    // async componentDidMount(){
+    //     if(this.state.error){
+    //         Alert.alert('Error', 'Sign in again', [
+    //             {text: 'Ok', onPress: ()=> {}}
+    //         ])
+    //     }
+    // }
+
+    // async componentDidMount(){
+    //     AsyncStorage.getItem('userToken', (err,result)=>{
+    //       if (result) {
+    //         this.props.navigation.navigate('DrawerRender', {screen: 'VegCardView'})
+    //       }
+    //     });
+    // }
 
     signIn = async() => {
         console.log("Sign in to "+"user/login")
         await axios({
             method: 'POST',
-            url: 'http://192.168.43.221:8000/customer/login/',
+            url: 'http://192.168.43.222:8000/customer/login/',
             data: {
                 email:this.state.email,
                 password:this.state.password,
@@ -30,7 +47,7 @@ export default class Signin extends React.Component {
             if(response.data.error == undefined){
                 console.log("Token is ", response.data)
                 AsyncStorage.setItem('userToken', response.data)
-                this.props.navigation.navigate('DrawerRender')
+                this.props.navigation.navigate('DrawerRender', {params: {user: response.data}})
             }
             else if(Array.isArray(response.data.error)){
                 console.log(response.data.error)

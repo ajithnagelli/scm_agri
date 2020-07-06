@@ -1,7 +1,7 @@
 //drawer with homepage
 
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, AsyncStorage} from 'react-native';
 
 import VegCardView from '../components/VegCardView'
 import ProfileActions from '../components/ProfileActions'
@@ -13,20 +13,38 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import { Button, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import axios from 'axios';
 
 const Drawer = createDrawerNavigator();
 
 function MyDrawer(params) {
+  var profile = async() => {
+    AsyncStorage.getItem('userToken', (err,result)=>{
+        console.log("token = ",result)
+        var config = {
+            headers: {'Auth':result}
+        };
+        console.log(config)
+        axios.get('http://192.168.43.222:8000/customer/profile/',{headers: {'Auth':result}})
+        .then((response) => {
+            console.log("Data is ", response.data)
+            params.navigation.navigate('DrawerRender', {screen: 'ProfileActions', params: {navigation: params.navigation, user : response.data}})
+        })
+        .catch((error) => {
+            console.log(error)
+            params.navigation.navigate('Signin', {error: 'Sign in again'})
+        });
+    })
+  }
   return(
     <View style={styles.container}>
-      <TouchableOpacity onPress={()=>params.navigation.navigate('DrawerRender', {screen: 'ProfileActions'})}>
+      <TouchableOpacity onPress={profile}>
         <Avatar
           rounded
           size='xlarge'
           source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRC6iPDSqcgCcAtdEz_rPY0B-sxqMd7hz0Hlg&usqp=CAU'}}
           />
-        <Text style={{fontWeight: 'bold', alignSelf: 'center', marginTop: 10, fontSize: 20}}>User Name</Text>
+        <Text style={{fontWeight: 'bold', alignSelf: 'center', marginTop: 10, fontSize: 20}}>Userrname</Text>
       </TouchableOpacity>
 
       <TouchableOpacity 
@@ -156,16 +174,14 @@ function MyDrawer(params) {
 }
 function DrawerRender({navigation}) {
   return (
-    <NavigationContainer independent={true}>
-      <Drawer.Navigator drawerContent={()=><MyDrawer navigation={navigation}/>} initialRouteName="VegCardView">
-        
-        <Drawer.Screen name="VegCardView" component={VegCardView} />
-        <Drawer.Screen name="ProfileActions" component={ProfileActions} />
-        <Drawer.Screen name="MyMap" component={MyMap} />
-        <Drawer.Screen name="MyOrders" component={MyOrders} />
-        
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <Drawer.Navigator drawerContent={()=><MyDrawer navigation={navigation}/>} initialRouteName="VegCardView">
+      
+      <Drawer.Screen name="VegCardView" component={VegCardView} />
+      <Drawer.Screen name="ProfileActions" component={ProfileActions} />
+      <Drawer.Screen name="MyMap" component={MyMap} />
+      <Drawer.Screen name="MyOrders" component={MyOrders} />
+      
+    </Drawer.Navigator>
   );
 }
 export default DrawerRender;
