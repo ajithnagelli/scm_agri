@@ -3,11 +3,25 @@ import {StyleSheet, Text, View, ScrollView} from 'react-native';
 import { Card, Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+var navigation;
+
 function ActiveOrder(props) {
+
+    const submitReview = () => {
+        navigation.navigate('DrawerRender', {screen:'SubmitReview'} );
+    };
+
+    // <Text>Order #{props.OrderID}</Text>
+    // <Text>{props.OrderedAtTime} {props.TotalItems} {props.Cost}</Text>
+    
+    var total = 0;
+    const checkStatus = () => {
+        navigation.navigate('DrawerRender', {screen:'TrackOrder', params: {veges: props.veges, quantities: props.quantities, prices: props.prices, deliveredBy: props.deliveredBy, OrderID: props.orderNo, OrderedAtTime: props.placedOn, TotalItems: props.veges.length, Cost: total}} );
+    };
 
     var len = props.veges.length;
     var element = [];
-    var total = 0;
+    
     for (var i = 0; i < len; i++) {
         total += props.prices[i];
         element.push(
@@ -57,10 +71,13 @@ function ActiveOrder(props) {
                 <Button 
                     title='Check Status'
                     buttonStyle= {{backgroundColor: 'black'}}
+                    onPress={checkStatus}
+                    
                 />
                 <Button 
-                    title='Chat'
+                    title='Review'
                     buttonStyle= {{backgroundColor: 'black'}}
+                    onPress={submitReview}
                 />
             </View>
         </View>
@@ -68,6 +85,7 @@ function ActiveOrder(props) {
 }
 
 export default function ActiveOrders(props) {
+    navigation=props.navigation;
     return(
         <ScrollView>
             <Text style={{textAlign: 'center', fontSize: 30, fontWeight: 'bold', borderWidth: 2, margin: 30}}>My Orders</Text>

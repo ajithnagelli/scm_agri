@@ -127,7 +127,7 @@ export default function ProfileActions(params) {
             </Menu>
 
             <TouchableOpacity 
-                onPress={console.log('policy')}
+                onPress={()=>console.log('policy')}
                 style={{borderWidth: 2, padding: 10, flexDirection: 'row'}}>
               <Icon 
                 name='info-circle'
