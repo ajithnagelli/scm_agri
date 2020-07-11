@@ -38,7 +38,7 @@ export default class Signin extends React.Component {
         console.log("Sign in to "+"user/login")
         await axios({
             method: 'POST',
-            url: 'http://192.168.43.222:8000/customer/login/',
+            url: 'http://192.168.2.7:8000/customer/login/',
             data: {
                 email:this.state.email,
                 password:this.state.password,

@@ -14,6 +14,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { Button, Avatar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
+import SubmitReview from '../screens/SubmitReview';
+import TrackOrder from '../screens/TrackOrder';
 
 const Drawer = createDrawerNavigator();
 
@@ -25,7 +27,7 @@ function MyDrawer(params) {
             headers: {'Auth':result}
         };
         console.log(config)
-        axios.get('http://192.168.43.222:8000/customer/profile/',{headers: {'Auth':result}})
+        axios.get('http://192.168.2.7:8000/customer/profile/',{headers: {'Auth':result}})
         .then((response) => {
             console.log("Data is ", response.data)
             params.navigation.navigate('DrawerRender', {screen: 'ProfileActions', params: {navigation: params.navigation, user : response.data}})
@@ -44,7 +46,7 @@ function MyDrawer(params) {
           size='xlarge'
           source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRC6iPDSqcgCcAtdEz_rPY0B-sxqMd7hz0Hlg&usqp=CAU'}}
           />
-        <Text style={{fontWeight: 'bold', alignSelf: 'center', marginTop: 10, fontSize: 20}}>Userrname</Text>
+        <Text style={{fontWeight: 'bold', alignSelf: 'center', marginTop: 10, fontSize: 20}}>Username</Text>
       </TouchableOpacity>
 
       <TouchableOpacity 
@@ -180,6 +182,8 @@ function DrawerRender({navigation}) {
       <Drawer.Screen name="ProfileActions" component={ProfileActions} />
       <Drawer.Screen name="MyMap" component={MyMap} />
       <Drawer.Screen name="MyOrders" component={MyOrders} />
+      <Drawer.Screen name="SubmitReview" component={SubmitReview} />
+      <Drawer.Screen name="TrackOrder" component={TrackOrder} />
       
     </Drawer.Navigator>
   );

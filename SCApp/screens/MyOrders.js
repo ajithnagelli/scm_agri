@@ -28,7 +28,6 @@ export default function MyOrders(params) {
   }, []);
 
   return (
-    <NavigationContainer independent={true}>
       <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
@@ -52,6 +51,5 @@ export default function MyOrders(params) {
         <Tab.Screen name="ActiveOrders" component={ActiveOrders} />
         <Tab.Screen name="PastOrders" component={PastOrders} />
       </Tab.Navigator>
-    </NavigationContainer>
   );
 }
