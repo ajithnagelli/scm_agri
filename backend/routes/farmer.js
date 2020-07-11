@@ -97,7 +97,7 @@ function login(req, res){
 }
 
 
-router.post('/profile', auth, profile)
+router.get('/profile', auth, profile)
 function profile(req, res){
     Farmer.findOne({
         _id: req.user._id

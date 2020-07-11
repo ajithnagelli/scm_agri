@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 const auth = require('./middleware_auth');
 const Customer = require('../models/customer.model');
+const Farmer = require('../models/farmer.model');
 process.SECRET_KEY = 'Emic_Enterprise'
 
 
@@ -153,4 +154,35 @@ function edit_profile(req, res){
 }
 
 
+router.get('/products', auth, products)
+function products(req, res){
+    let lis = []
+    Farmer.find()
+    .then(users =>{
+        for(let i=0; i<users.length; i++){
+            lis = lis.concat(users[i].products)
+        }
+        for(let j=0; j<lis.length; j++){
+            for(let k=j+1; k<lis.length; k++){
+                if(lis[j].productname == lis[k].productname && lis[j].price == lis[k].price){
+                    lis[j].quantity = parseFloat(lis[j].quantity) + parseFloat(lis[k].quantity)
+                    lis.splice(k, 1)
+                }
+            }
+        }
+        res.send(lis)
+    })
+}
+
+
+// router.get('/add_products', auth, add_products)
+// function add_products(req, res){
+//     var newValues = {
+        
+//     }
+//     Customer.findOneAndUpdate({
+//         _id: req.user._id
+//     }, newValues)
+//     .then
+// }
 module.exports = router;

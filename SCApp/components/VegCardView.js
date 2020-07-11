@@ -8,6 +8,12 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import DropDownPicker from 'react-native-dropdown-picker';
 
+// the url is "http://192.168.43.222:8000/customer/products" and the method is get
+// output will be in array of products with productname, quantity and price attributes
+
+
+
+
 function ActiveOrder(props) {
     return(
         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly'}}>
