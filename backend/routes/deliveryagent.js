@@ -7,8 +7,10 @@ const auth = require('./middleware_auth');
 const Deliveryagent = require('../models/deliveryagent.model');
 process.SECRET_KEY = 'Emic_Enterprise'
 
+// Login
 router.post('/login', login);
 function login(req, res){
+    // Get data from request
     const data={
         email: req.body.email,
         password: req.body.password
@@ -17,8 +19,10 @@ function login(req, res){
         email: req.body.email,
     })
     .then(user =>{
+        // Check if user exists
         if(user){
             if(bcrypt.compareSync(data.password, user.password)){
+                // Generate token and store in cookies
                 const payload = {
                     _id: user._id,
                     email: user.email,
@@ -44,12 +48,15 @@ function login(req, res){
     });
 }
 
+// View profile
 router.post('/profile', auth, profile);
 function profile(req, res){
+    // Find user using token in cookies
     Deliveryagent.findOne({
         _id: req.user._id
     })
     .then(user => {
+        // If user exists
         if(user){
             res.send(user)
         }
@@ -62,9 +69,10 @@ function profile(req, res){
     });
 }
 
-
+// Edit profile
 router.post('/edit_profile', auth, edit_profile);
 function edit_profile(req, res){
+    // Get data from request
     var newValues = { 
         $set: {
             phone: req.body.phone,
@@ -76,6 +84,7 @@ function edit_profile(req, res){
             prefered_orders: req.body.prefered_orders
         } 
     };
+    // Find user using token in cookies and update database
     Deliveryagent.findOneAndUpdate({
         _id: req.user._id
     }, newValues)
