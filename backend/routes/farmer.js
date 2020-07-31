@@ -6,6 +6,7 @@ const auth = require('./middleware_auth');
 
 // Import model
 const Farmer = require('../models/farmer.model');
+process.SECRET_KEY = 'Emic_Enterprise'
 
 // Sign up
 router.post('/signup', signup);

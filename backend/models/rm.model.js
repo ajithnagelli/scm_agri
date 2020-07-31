@@ -45,20 +45,10 @@ const schema = new Schema({
 
     longitude: {type:String},
 
-    products: [{
-        productId: {type:String, required:true},
-
-        productname : {type:String, required:true},
-
-        quantity: {type:String, required:true},
-
-        price: {type:String, required:true}
-    }],
-
-    orders: [{
+    assigned_orders: [{
         orderId: {type:String, required:true},
 
-        status: {type:String, enum:['accepted', 'rejected'], required:true},
+        status: {type:String, enum:['initiated', 'processing', 'completed', 'failed'], required:true},
 
         postedAt: {type:Date, default: Date.now, required:true},
 
@@ -69,14 +59,16 @@ const schema = new Schema({
 
             quantity: {type:String, required:true},
 
-            price: {type:String, required:true}
+            price: {type:String, required:true},
+
+            quality_check: {type: Boolean, default:false},
         }],
 
         total_cost: {type:String, required:true},
-    }]
+    }],
     
 });
 
 schema.set('toJSON', {virtuals:true});
 
-module.exports = mongoose.model('Farmer', schema);
+module.exports = mongoose.model('Rm', schema);
